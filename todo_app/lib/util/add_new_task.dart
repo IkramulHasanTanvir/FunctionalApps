@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
-class AddNewDialogBox extends StatelessWidget {
-  const AddNewDialogBox(
+class AddNewTask extends StatelessWidget {
+  const AddNewTask(
       {super.key,
-      required this.controller,
+      this.controller,
       required this.onSave,
       required this.onCancel});
 
@@ -17,9 +17,7 @@ class AddNewDialogBox extends StatelessWidget {
       title: const Text('ADD NEW'),
       content: TextField(
         controller: controller,
-        decoration: const InputDecoration(
-          labelText: 'Add new task',
-        ),
+        decoration: const InputDecoration(hintText: 'Add new task'),
       ),
       actions: [
         TextButton(

@@ -5,6 +5,7 @@ class Database {
 
   final _myBox = Hive.box('myBox');
 
+
   void createInitialData() {
     toDoList = [
       ['Make Tutorial', false],
@@ -12,11 +13,11 @@ class Database {
     ];
   }
 
-  void loadData() {
+  void loadData (){
     toDoList = _myBox.get('TODOLIST');
   }
 
-  void updateDatabase() {
+  void updateDatabase (){
     _myBox.put('TODOLIST', toDoList);
   }
-}
+  }
