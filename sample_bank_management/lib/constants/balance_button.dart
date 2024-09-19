@@ -4,12 +4,12 @@ import 'package:sample_bank_management/widgets/neumorphism_box.dart';
 class BalanceButton extends StatelessWidget {
   const BalanceButton({
     super.key,
-    required this.deposit,
-    required this.withdraw,
+    required this.balanceDeposit,
+    required this.balanceWithdraw,
   });
 
-  final VoidCallback deposit;
-  final VoidCallback withdraw;
+  final VoidCallback balanceDeposit;
+  final VoidCallback balanceWithdraw;
 
   @override
   Widget build(BuildContext context) {
@@ -22,7 +22,7 @@ class BalanceButton extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           InkWell(
-            onTap: deposit,
+            onTap: balanceDeposit,
             child: NeumorphismBox(
               child: Text(
                 'D E P O S I T',
@@ -34,7 +34,7 @@ class BalanceButton extends StatelessWidget {
             ),
           ),
           InkWell(
-            onTap: withdraw,
+            onTap: balanceWithdraw,
             child: NeumorphismBox(
               child: Text(
                 'W I T H D R A W',

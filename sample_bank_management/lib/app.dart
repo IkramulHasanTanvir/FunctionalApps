@@ -8,7 +8,7 @@ class BankManagement extends StatelessWidget {
   Widget build(BuildContext context) {
     return  MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomeScreen(),
+      home: const HomeScreen(),
       theme: ThemeData(
         scaffoldBackgroundColor: Colors.grey.shade300,
       ),

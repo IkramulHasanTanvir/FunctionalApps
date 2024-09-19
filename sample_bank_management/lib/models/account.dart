@@ -23,19 +23,3 @@ class Account {
   }
 }
 
-/*
-account.balanceWithdraw(
-double.parse(_withdrawTEController.text));
-_balanceList.add(_withdrawTEController.text);
-setState(() {});
-_withdrawTEController.clear();
-Navigator.pop(context);
-},
-onCancel: () {
-_withdrawTEController.clear();
-Navigator.pop(context);
-});
-*/
-
-
-

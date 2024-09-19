@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sample_bank_management/constants/balance_button.dart';
+import 'package:sample_bank_management/constants/balance_transaction_tile.dart';
 import 'package:sample_bank_management/constants/my_dialog.dart';
 import 'package:sample_bank_management/constants/user_details.dart';
 import 'package:sample_bank_management/constants/my_app_bar.dart';
@@ -40,87 +41,115 @@ class _HomeScreenState extends State<HomeScreen> {
         slivers: [
           MyAppBar(
             currentBalance: account.balance,
-            onTap: () {
+            openDrawer: () {
               scaffoldKey.currentState?.openDrawer();
             },
             userImagePath: account.userImage,
           ),
+
+          _buildDepositOrWithdrawButton(context),
+
+          //transaction or clear all button.
           SliverToBoxAdapter(
-            child: BalanceButton(
-              deposit: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return MyDialog(
-                          controller: _depositTEController,
-                          onSave: () {
-                            double depositAmount =
-                                double.parse(_depositTEController.text);
-                            account.balanceDeposit(depositAmount);
-
-                            // Add deposit transaction
-                            _balanceList.add(
-                                {'amount': depositAmount, 'type': 'deposit'});
-
-                            setState(() {});
-                            _depositTEController.clear();
-                            Navigator.pop(context);
-                          },
-                          onCancel: () {
-                            _depositTEController.clear();
-                            Navigator.pop(context);
-                          });
-                    });
-              },
-              withdraw: () {
-                showDialog(
-                    context: context,
-                    builder: (context) {
-                      return MyDialog(
-                          controller: _withdrawTEController,
-                          onSave: () {
-                            double withdrawAmount =
-                                double.parse(_withdrawTEController.text);
-                            account.balanceWithdraw(withdrawAmount);
-
-                            // Add withdraw transaction
-                            _balanceList.add(
-                                {'amount': withdrawAmount, 'type': 'withdraw'});
-
-                            setState(() {});
-                            _withdrawTEController.clear();
-                            Navigator.pop(context);
-                          },
-                          onCancel: () {
-                            _withdrawTEController.clear();
-                            Navigator.pop(context);
-                          });
-                    });
-              },
-            ),
-          ),
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              childCount: _balanceList.length,
-              (context, int index) {
-                var transaction = _balanceList[index];
-                bool isDeposit = transaction['type'] == 'deposit';
-                return ListTile(
-                  title: Text(
-                    '${transaction['type'].toUpperCase()} - ${transaction['amount'].toStringAsFixed(2)}\$',
-                    style: TextStyle(
-                      color: isDeposit ? Colors.green : Colors.red,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 24.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    'Transaction',
+                    style: TextStyle(color: Colors.grey.shade700),
+                  ),
+                  TextButton(
+                    onPressed: () {
+                      _balanceList.clear();
+                      setState(() {});
+                    },
+                    child: Text(
+                      'Clear all',
+                      style: TextStyle(color: Colors.grey.shade700),
                     ),
                   ),
-                  leading: Icon(
-                    isDeposit ? Icons.arrow_downward : Icons.arrow_upward,
-                    color: isDeposit ? Colors.green : Colors.red,
-                  ),
-                );
-              },
+                ],
+              ),
             ),
           ),
+
+          // transaction list
+          _buildTransactionList(),
         ],
+      ),
+    );
+  }
+
+  Widget _buildDepositOrWithdrawButton(context) {
+    return SliverToBoxAdapter(
+      child: BalanceButton(
+        balanceDeposit: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return MyDialog(
+                    controller: _depositTEController,
+                    onSave: () {
+                      double depositAmount =
+                          double.parse(_depositTEController.text);
+                      account.balanceDeposit(depositAmount);
+
+                      // Add deposit transaction
+                      _balanceList
+                          .add({'amount': depositAmount, 'type': 'deposit'});
+
+                      setState(() {});
+                      _depositTEController.clear();
+                      Navigator.pop(context);
+                    },
+                    onCancel: () {
+                      _depositTEController.clear();
+                      Navigator.pop(context);
+                    });
+              });
+        },
+        balanceWithdraw: () {
+          showDialog(
+              context: context,
+              builder: (context) {
+                return MyDialog(
+                    controller: _withdrawTEController,
+                    onSave: () {
+                      double withdrawAmount =
+                          double.parse(_withdrawTEController.text);
+                      account.balanceWithdraw(withdrawAmount);
+
+                      // Add withdraw transaction
+                      _balanceList
+                          .add({'amount': withdrawAmount, 'type': 'withdraw'});
+
+                      setState(() {});
+                      _withdrawTEController.clear();
+                      Navigator.pop(context);
+                    },
+                    onCancel: () {
+                      _withdrawTEController.clear();
+                      Navigator.pop(context);
+                    });
+              });
+        },
+      ),
+    );
+  }
+
+  Widget _buildTransactionList() {
+    return SliverList(
+      delegate: SliverChildBuilderDelegate(
+        childCount: _balanceList.length,
+        (context, int index) {
+          var transaction = _balanceList[index];
+          return BalanceTransactionTile(
+            amount: transaction['amount'],
+            type: transaction['type'],
+          );
+        },
       ),
     );
   }

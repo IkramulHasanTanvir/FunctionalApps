@@ -4,12 +4,12 @@ class MyAppBar extends StatelessWidget {
   const MyAppBar({
     super.key,
     required this.currentBalance,
-    required this.onTap,
+    required this.openDrawer,
     required this.userImagePath,
   });
 
   final double currentBalance;
-  final VoidCallback onTap;
+  final VoidCallback openDrawer;
   final String userImagePath;
 
   @override
@@ -19,7 +19,6 @@ class MyAppBar extends StatelessWidget {
       backgroundColor: Colors.grey.shade300,
       expandedHeight: 200,
       pinned: true,
-      //floating: true,
       flexibleSpace: _buildFlexibleSpaceBar(),
       actions: [
         IconButton(
@@ -80,7 +79,7 @@ class MyAppBar extends StatelessWidget {
 
   Widget _buildLeading() {
     return InkWell(
-      onTap: onTap,
+      onTap: openDrawer,
       borderRadius: BorderRadius.circular(44),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
