@@ -15,6 +15,7 @@ class MyDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.grey.shade300,
       title: const Text('\$'),
       content: TextField(
         keyboardType: TextInputType.number,
@@ -32,6 +33,5 @@ class MyDialog extends StatelessWidget {
         ),
       ],
     );
-    ;
   }
 }

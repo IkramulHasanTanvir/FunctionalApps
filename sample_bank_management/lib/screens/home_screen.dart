@@ -24,6 +24,9 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _depositTEController = TextEditingController();
   final TextEditingController _withdrawTEController = TextEditingController();
 
+  // New Balance list with transaction type
+  final List<Map<String, dynamic>> _balanceList = [];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,8 +54,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       return MyDialog(
                           controller: _depositTEController,
                           onSave: () {
-                            account.balanceDeposit(
-                                double.parse(_depositTEController.text));
+                            double depositAmount =
+                                double.parse(_depositTEController.text);
+                            account.balanceDeposit(depositAmount);
+
+                            // Add deposit transaction
+                            _balanceList.add(
+                                {'amount': depositAmount, 'type': 'deposit'});
+
                             setState(() {});
                             _depositTEController.clear();
                             Navigator.pop(context);
@@ -70,8 +79,14 @@ class _HomeScreenState extends State<HomeScreen> {
                       return MyDialog(
                           controller: _withdrawTEController,
                           onSave: () {
-                            account.balanceWithdraw(
-                                double.parse(_withdrawTEController.text));
+                            double withdrawAmount =
+                                double.parse(_withdrawTEController.text);
+                            account.balanceWithdraw(withdrawAmount);
+
+                            // Add withdraw transaction
+                            _balanceList.add(
+                                {'amount': withdrawAmount, 'type': 'withdraw'});
+
                             setState(() {});
                             _withdrawTEController.clear();
                             Navigator.pop(context);
@@ -83,11 +98,33 @@ class _HomeScreenState extends State<HomeScreen> {
                     });
               },
             ),
-          )
+          ),
+          SliverList(
+            delegate: SliverChildBuilderDelegate(
+              childCount: _balanceList.length,
+              (context, int index) {
+                var transaction = _balanceList[index];
+                bool isDeposit = transaction['type'] == 'deposit';
+                return ListTile(
+                  title: Text(
+                    '${transaction['type'].toUpperCase()} - ${transaction['amount'].toStringAsFixed(2)}\$',
+                    style: TextStyle(
+                      color: isDeposit ? Colors.green : Colors.red,
+                    ),
+                  ),
+                  leading: Icon(
+                    isDeposit ? Icons.arrow_downward : Icons.arrow_upward,
+                    color: isDeposit ? Colors.green : Colors.red,
+                  ),
+                );
+              },
+            ),
+          ),
         ],
       ),
     );
   }
+
   @override
   void dispose() {
     _withdrawTEController.dispose();
